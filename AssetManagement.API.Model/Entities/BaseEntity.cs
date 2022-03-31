@@ -8,9 +8,9 @@ namespace AssetManagement.API.Model.Entities
 {
     public class BaseEntity
     {
-        public DateTime? CreateDate { get; set; } = DateTime.Now;
+        public DateTime? CreateDate { get; set; }
         public string? CreatedBy { get; set; }
-        public DateTime? ModifiedDate { get; set; } 
+        public DateTime? ModifiedDate { get; set; } = DateTime.Now;
         public string? ModifiedBy { get; set; }
         public bool isActive { get; set; } = true;
     }

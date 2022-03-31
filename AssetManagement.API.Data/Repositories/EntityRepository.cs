@@ -73,6 +73,16 @@ namespace AssetManagement.API.Data.Repositories
             }
         }
 
+        public void SoftDelete(TEntity Entity)
+        {
+            using (var context = new Tcontext())
+            {
+                var updated = context.Entry(Entity);
+                updated.State = EntityState.Modified;
+                var deger = context.SaveChanges();
+            }
+        }
+
         public void Update(TEntity Entity)
         {
             using (var context = new Tcontext())

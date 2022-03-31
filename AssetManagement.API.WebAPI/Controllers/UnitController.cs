@@ -85,6 +85,32 @@ namespace AssetManagement.API.WebAPI.Controllers
             return BadRequest();
         }
 
+        [HttpPut]
+        [Route("softdeleteunit/{ID}")]
+        public async Task<IActionResult> SOFTDELETE(int unitID)
+        {
+            try
+            {
+                var data = await _dal.GetByIdAsync(unitID);
+                if (data == null)
+                {
+                    return NotFound($"{unitID} e ait veri bulunamadı...");
+                }
+                else
+                {
+                    var updated = _mapper.Map<Unit>(data);
+                    updated.GetType().GetProperty("isActive").SetValue(updated, false);
+                    _dal.SoftDelete(updated);
+                    return Ok();
+                }
+            }
+            catch (Exception ex)
+            {
+
+            }
+            return BadRequest();
+        }
+
         [HttpDelete("deleteunit/{ID}")]
         public IActionResult DELETE(int unitID)
         {

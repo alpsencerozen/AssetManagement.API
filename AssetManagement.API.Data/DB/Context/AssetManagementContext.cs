@@ -16,26 +16,26 @@ namespace AssetManagement.API.Data.DB.Context
             optionsBuilder.UseSqlServer(@"data source=.\SQLEXPRESS;initial catalog=AssetManagement;integrated security=True;");
         }
 
-        //Soft delete override
-        public override int SaveChanges()
-        {
-            foreach (var entry in ChangeTracker.Entries())
-            {
-                var entity = entry.Entity;
-                if (entry.State == EntityState.Modified)
-                {
-                    entity.GetType().GetProperty("ModifiedDate").SetValue(entity, DateTime.Now);
-                }
-                else if (entry.State == EntityState.Deleted && entity is ISoftDelete)
-                {
-                    entry.State = EntityState.Modified;
+        //Soft delete, Created Date, Modified Date override
+        //public override int SaveChanges()
+        //{
+        //    foreach (var entry in ChangeTracker.Entries())
+        //    {
+        //        var entity = entry.Entity;
+        //        if (entry.State == EntityState.Modified)
+        //        {
+        //            entity.GetType().GetProperty("ModifiedDate").SetValue(entity, DateTime.Now);
+        //        }
+        //        else if (entry.State == EntityState.Deleted && entity is ISoftDelete)
+        //        {
+        //            entry.State = EntityState.Modified;
 
-                    entity.GetType().GetProperty("isActive").SetValue(entity, false);
-                }
-            }
+        //            entity.GetType().GetProperty("isActive").SetValue(entity, false);
+        //        }
+        //    }
 
-            return base.SaveChanges();
-        }
+        //    return base.SaveChanges();
+        //}
 
         public DbSet<Asset> Asset { get; set; }
         public DbSet<Currency> Currency { get; set; }

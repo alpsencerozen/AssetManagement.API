@@ -12,8 +12,9 @@ namespace AssetManagement.API.Core.Repositories
         //T Get(Expression<Func<T, bool>> filter = null);
         //IQueryable<T> GetAll(Expression<Func<T, bool>> filter = null);
         //void Add(T entity);
-        void Update(T entity);
-        void Delete(T entity);
+        void Update(T Entity);
+        void Delete(T Entity);
+        void SoftDelete(T Entity);
         //void RemoveRange(IEnumerable<T> Entities);
         Task<T> GetByIdAsync(int id);
         Task<IEnumerable<T>> GetAllAsync();
