@@ -12,7 +12,8 @@ namespace AssetManagement.API.Model.Entities
     {
         [Key]
         public int ID { get; set; }
-        public int MasterID { get; set; }
+        public int? MasterID { get; set; }
+        public bool? isTitle { get; set; }
         public string Description { get; set; }
     }
 }

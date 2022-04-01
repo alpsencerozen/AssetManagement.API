@@ -45,7 +45,14 @@ namespace AssetManagement.API.WebAPI
 
             services.AddAutoMapper(typeof(IMapProfile));
 
+            #region DAL Services
             services.AddScoped<IUnitDAL, UnitDAL>();
+            services.AddScoped<IAssetTypeDAL, AssetTypeDAL>();
+            services.AddScoped<IAssetDAL, AssetDAL>();
+            services.AddScoped<IAssetGroupDAL, AssetGroupDAL>();
+            services.AddScoped<IBrandModelDAL, BrandModelDAL>();
+            services.AddScoped<ICurrencyDAL, CurrencyDAL>(); 
+            #endregion
 
 
 
@@ -63,7 +70,7 @@ namespace AssetManagement.API.WebAPI
 
             app.UseCors();
 
-            app.UseCors(builder => builder.WithOrigins("http://localhost:48737").AllowAnyHeader());
+            app.UseCors(builder => builder.WithOrigins("http://localhost:59510").AllowAnyHeader());
 
             app.UseHttpsRedirection();
 

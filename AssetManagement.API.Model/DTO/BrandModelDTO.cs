@@ -1,16 +1,13 @@
-﻿using AssetManagement.API.Core.Repositories;
-using System;
+﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace AssetManagement.API.Model.Entities
+namespace AssetManagement.API.Model.DTO
 {
-    public class BrandModel : BaseEntity, IEntity
+    public class BrandModelDTO
     {
-        [Key]
         public int ID { get; set; }
         public int? MasterID { get; set; }
         public bool? isBrand { get; set; }

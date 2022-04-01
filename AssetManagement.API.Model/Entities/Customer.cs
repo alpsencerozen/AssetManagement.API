@@ -12,7 +12,7 @@ namespace AssetManagement.API.Model.Entities
     {
         [Key]
         public int ID { get; set; }
-        public string SubscriptionNumber { get; set; }
+        public Guid? SubscriptionNumber { get; set; } = Guid.NewGuid();
         public string FirstName { get; set; }
         public string LastName { get; set; }
     }

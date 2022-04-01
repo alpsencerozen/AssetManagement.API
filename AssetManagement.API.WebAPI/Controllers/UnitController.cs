@@ -54,7 +54,7 @@ namespace AssetManagement.API.WebAPI.Controllers
         }
 
         [HttpPost]
-        [Route("~/api/addunits")]
+        [Route("~/api/add/[controller]")]
         public async Task<IActionResult> POST([FromBody]UnitDTO unit)
         {
             try
@@ -70,7 +70,7 @@ namespace AssetManagement.API.WebAPI.Controllers
         }
 
         [HttpPut]
-        [Route("~/api/updateunits")]
+        [Route("~/api/update/[controller]")]
         public IActionResult PUT([FromBody]UnitDTO unit)
         {
             try
@@ -86,7 +86,7 @@ namespace AssetManagement.API.WebAPI.Controllers
         }
 
         [HttpPut]
-        [Route("softdeleteunit/{ID}")]
+        [Route("softdelete/[controller]/{ID}")]
         public async Task<IActionResult> SOFTDELETE(int unitID)
         {
             try
@@ -111,7 +111,7 @@ namespace AssetManagement.API.WebAPI.Controllers
             return BadRequest();
         }
 
-        [HttpDelete("deleteunit/{ID}")]
+        [HttpDelete("delete/[controller]/{ID}")]
         public IActionResult DELETE(int unitID)
         {
             try

@@ -12,7 +12,7 @@ namespace AssetManagement.API.Model.Entities
     {
         [Key]
         public int ID { get; set; }
-        public int MasterID { get; set; }
+        public int? MasterID { get; set; }
         public bool isTeam { get; set; }
         public string Name { get; set; }
         public int CompanyID { get; set; }

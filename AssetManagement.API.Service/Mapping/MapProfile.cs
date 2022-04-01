@@ -19,6 +19,18 @@ namespace AssetManagement.API.Service.Mapping
             CreateMap<Unit, UnitDTO>();
             CreateMap<UnitDTO, Unit>();
 
+            CreateMap<Asset, AssetDTO>();
+            CreateMap<AssetDTO, Asset>();
+
+            CreateMap<AssetGroup, AssetGroupDTO>();
+            CreateMap<AssetGroupDTO, AssetGroup>();
+
+            CreateMap<AssetType, AssetTypeDTO>();
+            CreateMap<AssetTypeDTO, AssetType>();
+
+            CreateMap<BrandModel, BrandModelDTO>();
+            CreateMap<BrandModelDTO, BrandModel>();
+
         }
     }
 }

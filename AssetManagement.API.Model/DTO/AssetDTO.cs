@@ -1,16 +1,13 @@
-﻿using AssetManagement.API.Core.Repositories;
-using System;
+﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace AssetManagement.API.Model.Entities
+namespace AssetManagement.API.Model.DTO
 {
-    public class Asset : BaseEntity, IEntity
+    public class AssetDTO
     {
-        [Key]
         public int ID { get; set; }
         public bool? hasBarcode { get; set; }
         public Guid? RegistrationNumber { get; set; } //= Guid.NewGuid();
