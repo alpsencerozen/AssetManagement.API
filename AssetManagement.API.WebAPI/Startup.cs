@@ -52,6 +52,9 @@ namespace AssetManagement.API.WebAPI
             services.AddScoped<IAssetGroupDAL, AssetGroupDAL>();
             services.AddScoped<IBrandModelDAL, BrandModelDAL>();
             services.AddScoped<ICurrencyDAL, CurrencyDAL>(); 
+            services.AddScoped<IAssetBarcodeDAL, AssetBarcodeDAL>();
+            services.AddScoped<IAssetStatusDAL, AssetStatusDAL>();
+            services.AddScoped<ItblPriceDAL, tblPriceDAL>(); 
             #endregion
 
 
@@ -70,7 +73,8 @@ namespace AssetManagement.API.WebAPI
 
             app.UseCors();
 
-            app.UseCors(builder => builder.WithOrigins("http://localhost:59510").AllowAnyHeader());
+            app.UseCors(builder => builder.WithOrigins("http://localhost:59510").AllowAnyHeader().AllowAnyMethod().AllowAnyOrigin());
+            app.UseCors(builder => builder.WithOrigins("http://localhost:5005").AllowAnyHeader().AllowAnyMethod().AllowAnyOrigin());
 
             app.UseHttpsRedirection();
 

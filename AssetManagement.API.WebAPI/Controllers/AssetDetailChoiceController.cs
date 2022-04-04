@@ -15,16 +15,18 @@ namespace AssetManagement.API.WebAPI.Controllers
     [ApiController]
     public class AssetDetailChoiceController : ControllerBase
     {
-        IMapper _mapper; 
+        IMapper _mapper;
+        IAssetDAL _adal;
         IUnitDAL _udal;
         IAssetTypeDAL _atdal;
         IAssetGroupDAL _agdal;
         IBrandModelDAL _bmdal;
         ICurrencyDAL _cdal;
 
-        public AssetDetailChoiceController(IMapper mapper, IUnitDAL udal, IAssetTypeDAL atdal, IAssetGroupDAL agdal, IBrandModelDAL bmdal, ICurrencyDAL cdal)
+        public AssetDetailChoiceController(IMapper mapper, IAssetDAL adal, IUnitDAL udal, IAssetTypeDAL atdal, IAssetGroupDAL agdal, IBrandModelDAL bmdal, ICurrencyDAL cdal)
         {
             _mapper = mapper;
+            _adal = adal;
             _udal = udal;
             _atdal = atdal;
             _agdal = agdal;
@@ -56,6 +58,14 @@ namespace AssetManagement.API.WebAPI.Controllers
             choices.PriceCurrency = _mapper.Map<List<CurrencyDTO>>(PriceCurrencyList);
 
             return Ok(choices);
+        }
+
+        [HttpPost]
+        [Route("~/api/addasset/[controller]")]
+        public async Task<IActionResult> CreateAsset(AssetDetailChoicesDTO choices)
+        {
+            bool result = await _adal.CreateAsset(choices);
+            return Ok();
         }
 
 

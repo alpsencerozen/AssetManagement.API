@@ -31,6 +31,15 @@ namespace AssetManagement.API.Service.Mapping
             CreateMap<BrandModel, BrandModelDTO>();
             CreateMap<BrandModelDTO, BrandModel>();
 
+            CreateMap<AssetBarcode, AssetBarcodeDTO>();
+            CreateMap<AssetBarcodeDTO, AssetBarcode>();
+
+            CreateMap<AssetStatus, AssetStatusDTO>();
+            CreateMap<AssetStatusDTO, AssetStatus>();
+
+            CreateMap<tblPrice, tblPriceDTO>();
+            CreateMap<tblPriceDTO, tblPrice>();
+
         }
     }
 }
