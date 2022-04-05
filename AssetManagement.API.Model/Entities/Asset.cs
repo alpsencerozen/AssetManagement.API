@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -13,7 +14,8 @@ namespace AssetManagement.API.Model.Entities
         [Key]
         public int ID { get; set; }
         public bool? hasBarcode { get; set; }
-        public Guid? RegistrationNumber { get; set; } //= Guid.NewGuid();
+        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
+        public Guid? RegistrationNumber { get; set; }
         public int CompanyID { get; set; }
         public int AssetGroupID { get; set; }
         public int AssetTypeID { get; set; }
