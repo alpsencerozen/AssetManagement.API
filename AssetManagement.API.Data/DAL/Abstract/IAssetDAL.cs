@@ -12,7 +12,9 @@ namespace AssetManagement.API.Data.DAL.Abstract
     public interface IAssetDAL : IEntityRepository<Asset>
     {
         Task<bool> CreateAsset(AssetDetailChoicesDTO choices);
+        Task<bool> UpdateAssetAsync(AssetDetailChoicesDTO choices);
         List<AssetListDTO> GetAssetList();
         AssetListDTO GetAssetList(int ID);
+        AssetDetailChoicesDTO GetAssetDetailChoicesById(int ID);
     }
 }

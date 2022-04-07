@@ -60,11 +60,45 @@ namespace AssetManagement.API.WebAPI.Controllers
             return Ok(choices);
         }
 
+        [HttpGet("api/getassetdetailbyid/{id}")]
+        public async Task<IActionResult> GetById(int id)
+        {
+            var assetDetails = _adal.GetAssetDetailChoicesById(id);
+
+            IEnumerable<Unit> unitList = await _udal.GetAllAsync();
+            assetDetails.Unit = _mapper.Map<List<UnitDTO>>(unitList);
+
+            IEnumerable<AssetGroup> assetGroupList = await _agdal.GetAllAsync();
+            assetDetails.AssetGroupDesc = _mapper.Map<List<AssetGroupDTO>>(assetGroupList);
+
+            IEnumerable<AssetType> assetTypeList = await _atdal.GetAllAsync();
+            assetDetails.AssetTypeDesc = _mapper.Map<List<AssetTypeDTO>>(assetTypeList);
+
+            IEnumerable<BrandModel> brandModelList = await _bmdal.GetAllAsync();
+            assetDetails.BrandModel = _mapper.Map<List<BrandModelDTO>>(brandModelList);
+
+            IEnumerable<Currency> CostCurrencyList = await _cdal.GetAllAsync();
+            assetDetails.CostCurrency = _mapper.Map<List<CurrencyDTO>>(CostCurrencyList);
+
+            IEnumerable<Currency> PriceCurrencyList = await _cdal.GetAllAsync();
+            assetDetails.PriceCurrency = _mapper.Map<List<CurrencyDTO>>(PriceCurrencyList);
+
+            return Ok(assetDetails);
+        }
+
         [HttpPost]
         [Route("~/api/addasset/[controller]")]
         public async Task<IActionResult> CreateAsset(AssetDetailChoicesDTO choices)
         {
             bool result = await _adal.CreateAsset(choices);
+            return Ok();
+        }
+
+        [HttpPut]
+        [Route("~/api/updateasset/[controller]")]
+        public async Task<IActionResult> UpdateAsset(AssetDetailChoicesDTO updatedAsset)
+        {
+            bool result = await _adal.UpdateAssetAsync(updatedAsset);
             return Ok();
         }
 

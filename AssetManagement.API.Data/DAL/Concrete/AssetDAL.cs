@@ -3,6 +3,7 @@ using AssetManagement.API.Data.DB.Context;
 using AssetManagement.API.Data.Repositories;
 using AssetManagement.API.Model.DTO;
 using AssetManagement.API.Model.Entities;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Storage;
 using System;
 using System.Collections.Generic;
@@ -30,7 +31,8 @@ namespace AssetManagement.API.Data.DAL.Concrete
                 Description = choices.AssetDesc,
                 Cost = choices.Cost,
                 Guarantee = choices.hasGuarrantee,
-                EntryDate = choices.EntryDate
+                EntryDate = choices.EntryDate,
+                CreateDate = DateTime.Now
             };
 
             using (IDbContextTransaction transaction = db.Database.BeginTransaction())
@@ -79,9 +81,43 @@ namespace AssetManagement.API.Data.DAL.Concrete
             }
         }
 
+        public AssetDetailChoicesDTO GetAssetDetailChoicesById(int id)
+        {
+            var choices = new AssetDetailChoicesDTO();
+
+            choices.ID = id;
+
+            var result = (from a in db.Asset
+                          join ab in db.AssetBarcode on a.ID equals ab.AssetID
+                          join at in db.AssetType on a.AssetTypeID equals at.ID
+                          join ag in db.AssetGroup on a.AssetGroupID equals ag.ID
+                          join tp in db.tblPrice on a.ID equals tp.AssetID
+                          join bm in db.BrandModel on a.BrandModelID equals bm.ID
+                          where a.ID == id
+                          select new AssetDetailChoicesDTO()
+                          {
+                              ID = id,
+                              AssetDesc = a.Description,
+                              AssetTypeID = at.ID,
+                              AssetGroupID = ag.ID,
+                              Barcode = ab.Barcode,
+                              BrandModelID = bm.ID,
+                              CostCurrencyID = a.CurrencyID,
+                              PriceCurrencyID = tp.CurrencyID,
+                              Cost = a.Cost,
+                              Price = tp.Price,
+                              EntryDate = (DateTime)a.EntryDate
+                          }).ToList().LastOrDefault();
+
+            return result;
+
+        }
+        //
         public List<AssetListDTO> GetAssetList()
         {
-            var result =  (from a in db.Asset
+            var brands = db.BrandModel.Where(b => b.isBrand == true);
+
+            var result = (from a in db.Asset
                           join ab in db.AssetBarcode on a.ID equals ab.AssetID
                           join at in db.AssetType on a.AssetTypeID equals at.ID
                           join tp in db.tblPrice on a.ID equals tp.AssetID
@@ -93,9 +129,11 @@ namespace AssetManagement.API.Data.DAL.Concrete
                               Barcode = ab.Barcode,
                               AssetTypeName = at.Description,
                               Price = tp.Price,
-                              Brand = bm.Description,
-                              Model = bm.Description
-                          }).ToList();
+                              Model = bm.Description,
+                              Brand = brands.Where(x => x.ID == bm.MasterID).FirstOrDefault().Description
+                          }).ToList().GroupBy(x=>x.ID).Select(x=>x.Last()).ToList();
+
+
 
             var resultNoBarcode = (from a in db.Asset
                           join awb in db.AssetWithoutBarcode on a.ID equals awb.AssetID
@@ -161,6 +199,59 @@ namespace AssetManagement.API.Data.DAL.Concrete
             else
             {
                 return resultNoBarcode;
+            }
+        }
+
+        public async Task<bool> UpdateAssetAsync(AssetDetailChoicesDTO updated)
+        {
+            Asset existingAsset = await GetByIdAsync(updated.ID);
+            Asset updatedAsset = new Asset()
+            {
+                ID = updated.ID,
+                hasBarcode = true,
+                RegistrationNumber = existingAsset.RegistrationNumber,
+                CompanyID = 1, //degisecek
+                AssetGroupID = updated.AssetGroupID,
+                AssetTypeID = updated.AssetTypeID,
+                BrandModelID = updated.BrandModelID, //degisecek
+                CurrencyID = updated.CostCurrencyID,
+                Description = updated.AssetDesc,
+                Cost = updated.Cost,
+                Guarantee = updated.hasGuarrantee,
+                EntryDate = updated.EntryDate,
+                CreateDate = existingAsset.CreateDate,
+                ModifiedDate = DateTime.Now,
+                isActive = true
+            };
+
+            using (IDbContextTransaction transaction = db.Database.BeginTransaction())
+            {
+                try
+                {
+                    Update(updatedAsset);
+
+                    var oldAssetBarcode = db.AssetBarcode.Where(x => x.AssetID == updatedAsset.ID).OrderBy(x => x.ID).LastOrDefault();
+                    oldAssetBarcode.Barcode = updated.Barcode;
+                    db.SaveChanges();
+
+                    db.tblPrice.Add(new tblPrice()
+                    {
+                        AssetID = updatedAsset.ID,
+                        CurrencyID = updated.PriceCurrencyID,
+                        Price = updated.Price,
+                        Date = DateTime.Now
+                    });
+                    db.SaveChanges();
+
+                    transaction.Commit();
+                    return true;
+
+                }
+                catch (Exception ex)
+                {
+                    transaction.Rollback();
+                    return false;
+                }
             }
         }
     }
