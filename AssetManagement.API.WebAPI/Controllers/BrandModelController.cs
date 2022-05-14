@@ -68,5 +68,28 @@ namespace AssetManagement.API.WebAPI.Controllers
             }
             return BadRequest();
         }
+
+        [HttpGet]
+        [Route("~/api/getmodellistbyid/{id}")]
+        public async Task<IActionResult> GetModelListByID(int id)
+        {
+            try
+            {
+                var data = await _dal.GetModelList(id);
+                if (data == null)
+                {
+                    return NotFound($"{id} e ait veri bulunamadı...");
+                }
+                else
+                {
+                    return Ok(_mapper.Map<List<BrandModelDTO>>(data));
+                }
+            }
+            catch (Exception ex)
+            {
+
+            }
+            return BadRequest();
+        }
     }
 }

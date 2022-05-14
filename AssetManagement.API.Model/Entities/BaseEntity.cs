@@ -11,7 +11,7 @@ namespace AssetManagement.API.Model.Entities
         public DateTime? CreateDate { get; set; }
         //string -> int
         public string CreatedBy { get; set; }
-        public DateTime? ModifiedDate { get; set; } = DateTime.Now;
+        public DateTime? ModifiedDate { get; set; }
         public string ModifiedBy { get; set; }
         public bool isActive { get; set; } = true;
     }

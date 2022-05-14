@@ -55,6 +55,7 @@ namespace AssetManagement.API.Data.DAL.Concrete
                         AssetID = addedAsset.ID,
                         Price = choices.Price,
                         CurrencyID = choices.PriceCurrencyID,
+                        CreateDate = DateTime.Now,
                         Date = DateTime.Now
                     });
                     db.SaveChanges();
@@ -65,6 +66,7 @@ namespace AssetManagement.API.Data.DAL.Concrete
                         PersonnelID = 2, //Degisecek
                         StatusID = 1,
                         Date = DateTime.Now,
+                        CreateDate = DateTime.Now,
                         Note = "İlk giriş"
                     });
                     db.SaveChanges();
@@ -122,6 +124,7 @@ namespace AssetManagement.API.Data.DAL.Concrete
                           join at in db.AssetType on a.AssetTypeID equals at.ID
                           join tp in db.tblPrice on a.ID equals tp.AssetID
                           join bm in db.BrandModel on a.BrandModelID equals bm.ID
+                          where a.isActive == true
                           select new AssetListDTO()
                           {
                               ID = a.ID,
@@ -140,6 +143,7 @@ namespace AssetManagement.API.Data.DAL.Concrete
                           join at in db.AssetType on a.AssetTypeID equals at.ID
                           join tp in db.tblPrice on a.ID equals tp.AssetID
                           join bm in db.BrandModel on a.BrandModelID equals bm.ID
+                          where a.isActive == true
                           select new AssetListDTO()
                           {
                               ID = a.ID,
@@ -229,19 +233,32 @@ namespace AssetManagement.API.Data.DAL.Concrete
                 try
                 {
                     Update(updatedAsset);
+                    db.SaveChanges();
 
                     var oldAssetBarcode = db.AssetBarcode.Where(x => x.AssetID == updatedAsset.ID).OrderBy(x => x.ID).LastOrDefault();
-                    oldAssetBarcode.Barcode = updated.Barcode;
-                    db.SaveChanges();
 
-                    db.tblPrice.Add(new tblPrice()
+                    if (oldAssetBarcode.Barcode != updated.Barcode)
                     {
-                        AssetID = updatedAsset.ID,
-                        CurrencyID = updated.PriceCurrencyID,
-                        Price = updated.Price,
-                        Date = DateTime.Now
-                    });
-                    db.SaveChanges();
+                        oldAssetBarcode.Barcode = updated.Barcode;
+                        oldAssetBarcode.ModifiedDate = DateTime.Now;
+                        db.AssetBarcode.Update(oldAssetBarcode);
+                        db.SaveChanges();
+                    }
+
+                    tblPrice lastPrice = db.tblPrice.Where(x => x.AssetID == existingAsset.ID).OrderBy(x=>x.Date).LastOrDefault();
+
+                    if (lastPrice.Price != updated.Price)
+                    {
+                        db.tblPrice.Add(new tblPrice()
+                        {
+                            AssetID = updatedAsset.ID,
+                            CurrencyID = updated.PriceCurrencyID,
+                            Price = updated.Price,
+                            Date = DateTime.Now,
+                            CreateDate = DateTime.Now
+                        });
+                        db.SaveChanges();
+                    }
 
                     transaction.Commit();
                     return true;

@@ -32,14 +32,14 @@ namespace AssetManagement.API.WebAPI.Controllers
         }
 
         [HttpGet("{ID}")]
-        public async Task <IActionResult> GET(int unitID)
+        public async Task <IActionResult> GET(int ID)
         {
             try
             {
-                var data = await _dal.GetByIdAsync(unitID);
+                var data = await _dal.GetByIdAsync(ID);
                 if (data == null)
                 {
-                    return NotFound($"{unitID} e ait veri bulunamadı...");
+                    return NotFound($"{ID} e ait veri bulunamadı...");
                 }
                 else
                 {
