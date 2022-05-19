@@ -11,6 +11,7 @@ namespace AssetManagement.API.Model.DTO
         public int ID { get; set; }
         public Guid? RegistrationNumber { get; set; }
         public string Barcode { get; set; }
+        public string AssetGroupName { get; set; }
         public string AssetTypeName { get; set; }
         public decimal Price { get; set; }
         public string Brand { get; set; }

@@ -60,7 +60,7 @@ namespace AssetManagement.API.WebAPI.Controllers
             return Ok(choices);
         }
 
-        [HttpGet("api/getassetdetailbyid/{id}")]
+        [HttpGet("~/api/getassetdetailbyid/{id}")]
         public async Task<IActionResult> GetById(int id)
         {
             var assetDetails = _adal.GetAssetDetailChoicesById(id);

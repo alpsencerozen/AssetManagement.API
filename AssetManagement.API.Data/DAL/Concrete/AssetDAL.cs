@@ -107,6 +107,7 @@ namespace AssetManagement.API.Data.DAL.Concrete
                               CostCurrencyID = a.CurrencyID,
                               PriceCurrencyID = tp.CurrencyID,
                               Cost = a.Cost,
+                              hasGuarrantee = a.Guarantee.GetValueOrDefault(),
                               Price = tp.Price,
                               EntryDate = (DateTime)a.EntryDate
                           }).ToList().LastOrDefault();
@@ -122,6 +123,7 @@ namespace AssetManagement.API.Data.DAL.Concrete
             var result = (from a in db.Asset
                           join ab in db.AssetBarcode on a.ID equals ab.AssetID
                           join at in db.AssetType on a.AssetTypeID equals at.ID
+                          join ag in db.AssetGroup on a.AssetGroupID equals ag.ID
                           join tp in db.tblPrice on a.ID equals tp.AssetID
                           join bm in db.BrandModel on a.BrandModelID equals bm.ID
                           where a.isActive == true
@@ -130,17 +132,19 @@ namespace AssetManagement.API.Data.DAL.Concrete
                               ID = a.ID,
                               RegistrationNumber = a.RegistrationNumber,
                               Barcode = ab.Barcode,
+                              AssetGroupName = ag.Description,
                               AssetTypeName = at.Description,
                               Price = tp.Price,
                               Model = bm.Description,
                               Brand = brands.Where(x => x.ID == bm.MasterID).FirstOrDefault().Description
-                          }).ToList().GroupBy(x=>x.ID).Select(x=>x.Last()).ToList();
+                          }).ToList().GroupBy(x=>x.ID).Select(x=>x.Last()).OrderBy(x => x.ID).ToList();
 
 
 
             var resultNoBarcode = (from a in db.Asset
                           join awb in db.AssetWithoutBarcode on a.ID equals awb.AssetID
                           join at in db.AssetType on a.AssetTypeID equals at.ID
+                          join ag in db.AssetGroup on a.AssetGroupID equals ag.ID
                           join tp in db.tblPrice on a.ID equals tp.AssetID
                           join bm in db.BrandModel on a.BrandModelID equals bm.ID
                           where a.isActive == true
@@ -149,6 +153,7 @@ namespace AssetManagement.API.Data.DAL.Concrete
                               ID = a.ID,
                               RegistrationNumber = a.RegistrationNumber,
                               Barcode = null,
+                              AssetGroupName = ag.Description,
                               AssetTypeName = at.Description,
                               Price = tp.Price,
                               Brand = bm.Description,
