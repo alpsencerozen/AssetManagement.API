@@ -10,5 +10,6 @@ namespace AssetManagement.API.Model.DTO
     {
         public int ID { get; set; }
         public string Description { get; set; }
+        public bool isActive { get; set; }
     }
 }

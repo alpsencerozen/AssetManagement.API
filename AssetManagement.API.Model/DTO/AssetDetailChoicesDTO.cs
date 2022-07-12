@@ -19,31 +19,22 @@ namespace AssetManagement.API.Model.DTO
 
         public List<BrandModelDTO> BrandModel { get; set; }
         public int BrandModelID { get; set; }
-        //brand model
-        //public List<BrandModelDTO> Brand { get; set; }
-        //public int BrandID { get; set; }
-
-        //public List<BrandModelDTO> Model { get; set; }
-        //public int ModelID { get; set; }
-
 
         public bool hasGuarrantee { get; set; }
         public DateTime EntryDate { get; set; }
 
         //for no barcode
         public List<UnitDTO> Unit { get; set; }
-        public string UnitID { get; set; }
+        public int UnitID { get; set; }
         public decimal Quantity { get; set; }
+
         public decimal Cost { get; set; }
         public List<CurrencyDTO> CostCurrency { get; set; }
         public int CostCurrencyID { get; set; }
-
         public decimal Price { get; set; }
         public List<CurrencyDTO> PriceCurrency { get; set; }
         public int PriceCurrencyID { get; set; }
-
         public int CompanyID { get; set; }
-
         public string AssetDesc { get; set; }
 
     }
